@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import TaskBoard from './TaskBoard';
 import { Loader } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 const HeroSection = () => {
+  const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -37,8 +39,11 @@ const HeroSection = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6 items-center">
-          <Button className="hero-gradient text-white hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] text-base h-12 px-8 transition-all duration-300 min-h-[48px] font-medium">
-            Try Demo
+          <Button 
+            onClick={() => navigate('/dashboard')}
+            className="hero-gradient text-white hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] text-base h-12 px-8 transition-all duration-300 min-h-[48px] font-medium"
+          >
+            Launch Dashboard
           </Button>
           <Button variant="outline" className="border-primary/40 text-foreground hover:bg-primary/10 hover:border-primary/60 text-base h-12 px-8 transition-all duration-300 min-h-[48px]">
             Explore Careers
