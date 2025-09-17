@@ -1,0 +1,16 @@
+services:
+  - name: prismiq-server
+    type: web
+    env: node
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    rootDir: server
+    envVars:
+      - key: ML_SERVICE_URL
+        value: https://prismiq-ml.onrender.com
+  - name: prismiq-ml
+    type: web
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    rootDir: ml-service

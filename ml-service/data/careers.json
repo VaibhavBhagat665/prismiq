@@ -1,0 +1,7 @@
+[
+  {"title":"Data Scientist","description":"Analyze data and build predictive models","skills":["python","ml","sql","stats","pandas"]},
+  {"title":"ML Engineer","description":"Deploy and scale ML systems","skills":["pytorch","mlops","docker","kubernetes","aws"]},
+  {"title":"Data Analyst","description":"BI dashboards and insights","skills":["sql","bi","excel","tableau"]},
+  {"title":"Data Engineer","description":"Build data pipelines and warehouses","skills":["spark","airflow","sql","aws"]},
+  {"title":"MLOps Engineer","description":"Operate ML in production","skills":["mlops","cicd","monitoring","kubernetes"]}
+]

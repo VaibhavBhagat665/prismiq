@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#9b8cf6"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="#081126"/>
+  <g transform="translate(40,40)">
+    <rect x="0" y="0" width="360" height="120" rx="12" fill="#0f172a" stroke="#ffffff10"/>
+    <rect x="380" y="0" width="360" height="120" rx="12" fill="#0f172a" stroke="#ffffff10"/>
+    <rect x="0" y="140" width="740" height="200" rx="12" fill="#0f172a" stroke="#ffffff10"/>
+    <g transform="translate(20,16)" fill="url(#g)">
+      <rect x="0" y="0" width="140" height="24" rx="6" opacity="0.14"/>
+      <rect x="160" y="0" width="120" height="24" rx="6" opacity="0.08"/>
+      <circle cx="60" cy="70" r="28" fill="#9b8cf6" opacity="0.12"/>
+    </g>
+    <text x="24" y="22" fill="#cbd5e1" font-family="Inter, Arial" font-size="14">Career recommendations</text>
+    <text x="404" y="22" fill="#cbd5e1" font-family="Inter, Arial" font-size="14">Roadmap overview</text>
+    <text x="24" y="160" fill="#cbd5e1" font-family="Inter, Arial" font-size="14">Recent chats</text>
+  </g>
+</svg>
