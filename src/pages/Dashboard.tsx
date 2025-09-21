@@ -20,10 +20,17 @@ import {
   Brain,
   Target,
   Users,
-  Building
+  Building,
+  MessageCircle,
+  Upload,
+  Sparkles
 } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import CareerRecommendations from '@/components/CareerRecommendations';
+import Roadmap from '@/components/Roadmap';
+import ChatBox from '@/components/ChatBox';
+import ResumeUpload from '@/components/ResumeUpload';
 
 interface JobOpportunity {
   id: string;
@@ -237,181 +244,237 @@ const Dashboard = () => {
       <main className="flex-1 container mx-auto px-4 py-8">
         {/* Dashboard Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Your Career Dashboard</h1>
+          <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
+            Your Career Dashboard
+            <Sparkles className="h-8 w-8 text-yellow-500" />
+          </h1>
           <p className="text-muted-foreground text-lg">
-            AI-powered job recommendations from LinkedIn, Naukri, and Internshala
+            AI-powered career guidance, recommendations, and job opportunities
           </p>
         </div>
 
-        {/* ML Suggestions Section */}
-        <div className="mb-8">
-          <div className="flex items-center gap-2 mb-4">
-            <Brain className="h-6 w-6 text-primary" />
-            <h2 className="text-2xl font-semibold">AI Insights & Recommendations</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {mlSuggestions.map((suggestion, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    {getSuggestionIcon(suggestion.type)}
-                    <Badge variant={suggestion.priority === 'high' ? 'destructive' : 'secondary'}>
-                      {suggestion.priority}
-                    </Badge>
-                  </div>
-                  <CardTitle className="text-lg">{suggestion.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-3">{suggestion.description}</p>
-                  <Button size="sm" className="w-full">
-                    {suggestion.action}
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
+        {/* Main Dashboard Tabs */}
+        <Tabs defaultValue="overview" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="overview" className="flex items-center gap-2">
+              <Brain className="h-4 w-4" />
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="recommendations" className="flex items-center gap-2">
+              <Target className="h-4 w-4" />
+              Recommendations
+            </TabsTrigger>
+            <TabsTrigger value="roadmap" className="flex items-center gap-2">
+              <MapPin className="h-4 w-4" />
+              Roadmap
+            </TabsTrigger>
+            <TabsTrigger value="chat" className="flex items-center gap-2">
+              <MessageCircle className="h-4 w-4" />
+              AI Mentor
+            </TabsTrigger>
+            <TabsTrigger value="resume" className="flex items-center gap-2">
+              <Upload className="h-4 w-4" />
+              Resume
+            </TabsTrigger>
+          </TabsList>
 
-        {/* Search and Filters */}
-        <div className="mb-6">
-          <div className="flex flex-col md:flex-row gap-4 items-center">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search jobs, companies, or skills..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
+          {/* Overview Tab */}
+          <TabsContent value="overview" className="space-y-6">
+            {/* ML Suggestions Section */}
+            <div className="mb-8">
+              <div className="flex items-center gap-2 mb-4">
+                <Brain className="h-6 w-6 text-primary" />
+                <h2 className="text-2xl font-semibold">AI Insights & Quick Actions</h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {mlSuggestions.map((suggestion, index) => (
+                  <Card key={index} className="hover:shadow-lg transition-shadow">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between">
+                        {getSuggestionIcon(suggestion.type)}
+                        <Badge variant={suggestion.priority === 'high' ? 'destructive' : 'secondary'}>
+                          {suggestion.priority}
+                        </Badge>
+                      </div>
+                      <CardTitle className="text-lg">{suggestion.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground mb-3">{suggestion.description}</p>
+                      <Button size="sm" className="w-full">
+                        {suggestion.action}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
-            <Select value={selectedPlatform} onValueChange={setSelectedPlatform}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="All Platforms" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Platforms</SelectItem>
-                <SelectItem value="linkedin">LinkedIn</SelectItem>
-                <SelectItem value="naukri">Naukri</SelectItem>
-                <SelectItem value="internshala">Internshala</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={selectedExperience} onValueChange={setSelectedExperience}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Experience Level" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Levels</SelectItem>
-                <SelectItem value="0">Entry Level</SelectItem>
-                <SelectItem value="2">Mid Level</SelectItem>
-                <SelectItem value="5">Senior Level</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
 
-        {/* Job Listings */}
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-2xl font-semibold">
-            Job Opportunities ({filteredJobs.length})
-          </h2>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Filter className="h-4 w-4" />
-            Sorted by Match Score
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {filteredJobs.map((job) => (
-            <Card key={job.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-12 w-12">
-                      <AvatarImage src={job.companyLogo} alt={job.company} />
-                      <AvatarFallback>
-                        <Building className="h-6 w-6" />
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <CardTitle className="text-xl">{job.title}</CardTitle>
-                      <CardDescription className="text-base">{job.company}</CardDescription>
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-end gap-2">
-                    <Badge className={`${getPlatformBadgeColor(job.platform)} text-white`}>
-                      {getPlatformIcon(job.platform)} {job.platform}
-                    </Badge>
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm font-semibold">{job.matchScore}% match</span>
-                    </div>
-                  </div>
+            {/* Search and Filters */}
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Briefcase className="h-6 w-6 text-primary" />
+                <h2 className="text-2xl font-semibold">Job Opportunities</h2>
+              </div>
+              <div className="flex flex-col md:flex-row gap-4 items-center">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search jobs, companies, or skills..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10"
+                  />
                 </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <MapPin className="h-4 w-4" />
-                      {job.location}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <DollarSign className="h-4 w-4" />
-                      {job.salary}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Briefcase className="h-4 w-4" />
-                      {job.type}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Clock className="h-4 w-4" />
-                      {job.postedDate}
-                    </div>
-                  </div>
-                  
-                  <p className="text-sm text-muted-foreground line-clamp-2">
-                    {job.description}
-                  </p>
-                  
-                  <div className="flex flex-wrap gap-2">
-                    {job.skills.slice(0, 4).map((skill, index) => (
-                      <Badge key={index} variant="outline" className="text-xs">
-                        {skill}
-                      </Badge>
-                    ))}
-                    {job.skills.length > 4 && (
-                      <Badge variant="outline" className="text-xs">
-                        +{job.skills.length - 4} more
-                      </Badge>
-                    )}
-                  </div>
-                  
-                  <div className="flex gap-2 pt-2">
-                    <Button className="flex-1" asChild>
-                      <a href={job.applicationUrl} target="_blank" rel="noopener noreferrer">
-                        Apply Now
-                        <ExternalLink className="h-4 w-4 ml-2" />
-                      </a>
-                    </Button>
-                    <Button variant="outline" size="icon">
-                      <Star className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                <Select value={selectedPlatform} onValueChange={setSelectedPlatform}>
+                  <SelectTrigger className="w-full md:w-48">
+                    <SelectValue placeholder="All Platforms" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Platforms</SelectItem>
+                    <SelectItem value="linkedin">LinkedIn</SelectItem>
+                    <SelectItem value="naukri">Naukri</SelectItem>
+                    <SelectItem value="internshala">Internshala</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select value={selectedExperience} onValueChange={setSelectedExperience}>
+                  <SelectTrigger className="w-full md:w-48">
+                    <SelectValue placeholder="Experience Level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Levels</SelectItem>
+                    <SelectItem value="0">Entry Level</SelectItem>
+                    <SelectItem value="2">Mid Level</SelectItem>
+                    <SelectItem value="5">Senior Level</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
 
-        {filteredJobs.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-xl font-semibold mb-2">No jobs found</h3>
-            <p className="text-muted-foreground">
-              Try adjusting your search criteria or filters
-            </p>
-          </div>
-        )}
+            {/* Job Listings */}
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-xl font-semibold">
+                Available Positions ({filteredJobs.length})
+              </h3>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Filter className="h-4 w-4" />
+                Sorted by Match Score
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {filteredJobs.map((job) => (
+                <Card key={job.id} className="hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-12 w-12">
+                          <AvatarImage src={job.companyLogo} alt={job.company} />
+                          <AvatarFallback>
+                            <Building className="h-6 w-6" />
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <CardTitle className="text-xl">{job.title}</CardTitle>
+                          <CardDescription className="text-base">{job.company}</CardDescription>
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-end gap-2">
+                        <Badge className={`${getPlatformBadgeColor(job.platform)} text-white`}>
+                          {getPlatformIcon(job.platform)} {job.platform}
+                        </Badge>
+                        <div className="flex items-center gap-1">
+                          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                          <span className="text-sm font-semibold">{job.matchScore}% match</span>
+                        </div>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <MapPin className="h-4 w-4" />
+                          {job.location}
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <DollarSign className="h-4 w-4" />
+                          {job.salary}
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Briefcase className="h-4 w-4" />
+                          {job.type}
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Clock className="h-4 w-4" />
+                          {job.postedDate}
+                        </div>
+                      </div>
+                      
+                      <p className="text-sm text-muted-foreground line-clamp-2">
+                        {job.description}
+                      </p>
+                      
+                      <div className="flex flex-wrap gap-2">
+                        {job.skills.slice(0, 4).map((skill, index) => (
+                          <Badge key={index} variant="outline" className="text-xs">
+                            {skill}
+                          </Badge>
+                        ))}
+                        {job.skills.length > 4 && (
+                          <Badge variant="outline" className="text-xs">
+                            +{job.skills.length - 4} more
+                          </Badge>
+                        )}
+                      </div>
+                      
+                      <div className="flex gap-2 pt-2">
+                        <Button className="flex-1" asChild>
+                          <a href={job.applicationUrl} target="_blank" rel="noopener noreferrer">
+                            Apply Now
+                            <ExternalLink className="h-4 w-4 ml-2" />
+                          </a>
+                        </Button>
+                        <Button variant="outline" size="icon">
+                          <Star className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {filteredJobs.length === 0 && (
+              <div className="text-center py-12">
+                <div className="text-6xl mb-4">🔍</div>
+                <h3 className="text-xl font-semibold mb-2">No jobs found</h3>
+                <p className="text-muted-foreground">
+                  Try adjusting your search criteria or filters
+                </p>
+              </div>
+            )}
+          </TabsContent>
+
+          {/* Career Recommendations Tab */}
+          <TabsContent value="recommendations">
+            <CareerRecommendations />
+          </TabsContent>
+
+          {/* Skills Roadmap Tab */}
+          <TabsContent value="roadmap">
+            <Roadmap />
+          </TabsContent>
+
+          {/* AI Chat Tab */}
+          <TabsContent value="chat">
+            <ChatBox />
+          </TabsContent>
+
+          {/* Resume Upload Tab */}
+          <TabsContent value="resume">
+            <ResumeUpload />
+          </TabsContent>
+        </Tabs>
       </main>
 
       <Footer />
