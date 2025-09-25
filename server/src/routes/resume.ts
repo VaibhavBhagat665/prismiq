@@ -3,12 +3,11 @@ import { Router, Request, Response } from 'express'
 import multer from 'multer'
 import pdfParse from 'pdf-parse'
 import { callMLService } from '../services/mlClient.js'
-import { getFirestore } from 'firebase-admin/firestore'
+import { db } from '../services/firebase.js'
 import fs from 'fs'
 
 const router = Router()
 export { router as resumeRouter }
-const db = getFirestore()
 
 const upload = multer({ 
   dest: 'uploads/',

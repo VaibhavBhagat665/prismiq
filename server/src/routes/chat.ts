@@ -1,11 +1,10 @@
 import { Router, Request, Response } from 'express'
 import Joi from 'joi'
 import { callMLService } from '../services/mlClient.js'
-import { getFirestore } from 'firebase-admin/firestore'
+import { db } from '../services/firebase.js'
 
 const router = Router()
 export { router as chatRouter }
-const db = getFirestore()
 
 router.post('/chat', async (req: Request, res: Response) => {
   try {

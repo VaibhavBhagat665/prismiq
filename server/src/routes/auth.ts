@@ -1,9 +1,8 @@
 /** Auth routes for demo login */
 import express from 'express'
-import { getFirestore } from 'firebase-admin/firestore'
+import { db } from '../services/firebase.js'
 
 const router = express.Router()
-const db = getFirestore()
 
 // Demo login endpoint
 router.post('/auth/demo-login', async (req, res) => {
