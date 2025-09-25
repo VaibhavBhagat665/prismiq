@@ -1,12 +1,13 @@
-import { Router } from 'express'
+import { Router, Request, Response } from 'express'
 import Joi from 'joi'
-import { callMLService } from '../services/mlClient.js'
+import { callMLService } from '../services/mlClient'
 import { getFirestore } from 'firebase-admin/firestore'
 
-export const chatRouter = Router()
+const router = Router()
+export { router as chatRouter }
 const db = getFirestore()
 
-chatRouter.post('/chat', async (req, res) => {
+router.post('/chat', async (req: Request, res: Response) => {
   try {
     const schema = Joi.object({ 
       message: Joi.string().min(1).required(), 

@@ -1,12 +1,13 @@
-import { Router } from 'express'
+import { Router, Request, Response } from 'express'
 import Joi from 'joi'
-import { callMLService } from '../services/mlClient.js'
+import { callMLService } from '../services/mlClient'
 import { getFirestore } from 'firebase-admin/firestore'
 
-export const recommendRouter = Router()
+const router = Router()
+export { router as recommendRouter }
 const db = getFirestore()
 
-recommendRouter.post('/recommend', async (req, res) => {
+router.post('/recommend', async (req: Request, res: Response) => {
   try {
     const schema = Joi.object({ 
       profile: Joi.object().unknown(true).required(),

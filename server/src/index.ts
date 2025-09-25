@@ -6,13 +6,13 @@ import dotenv from 'dotenv';
 import multer from 'multer';
 
 // Import routes
-import authRoutes from './routes/auth.js';
-import recommendRoutes from './routes/recommend.js';
-import roadmapRoutes from './routes/roadmap.js';
-import chatRoutes from './routes/chat.js';
-import pricingRoutes from './routes/pricing.js';
-import resumeRoutes from './routes/resume.js';
-import { embedRouter } from './routes/embed.js';
+import { authRouter } from './routes/auth';
+import { recommendRouter } from './routes/recommend';
+import { roadmapRouter } from './routes/roadmap';
+import { chatRouter } from './routes/chat';
+import { pricingRouter } from './routes/pricing';
+import { resumeRouter } from './routes/resume';
+import { embedRouter } from './routes/embed';
 
 dotenv.config();
 
@@ -41,13 +41,13 @@ app.get('/health', (req, res) => {
 });
 
 // Routes
-app.use('/api/auth', authRoutes);
-app.use('/api', recommendRoutes);
-app.use('/api', roadmapRoutes);
-app.use('/api', chatRoutes);
+app.use('/api/auth', authRouter);
+app.use('/api', recommendRouter);
+app.use('/api', roadmapRouter);
+app.use('/api', chatRouter);
 app.use('/api', embedRouter);
-app.use('/api', pricingRoutes);
-app.use('/api', resumeRoutes);
+app.use('/api', pricingRouter);
+app.use('/api', resumeRouter);
 
 // Basic route
 app.get('/', (req, res) => {

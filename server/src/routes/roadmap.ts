@@ -1,11 +1,13 @@
-import { Router } from 'express'
-import { callMLService } from '../services/mlClient.js'
+import { Router, Request, Response } from 'express'
+import Joi from 'joi'
+import { callMLService } from '../services/mlClient'
 import { getFirestore } from 'firebase-admin/firestore'
 
-export const roadmapRouter = Router()
+const router = Router()
+export { router as roadmapRouter }
 const db = getFirestore()
 
-roadmapRouter.get('/roadmap', async (req, res) => {
+router.get('/roadmap', async (req: Request, res: Response) => {
   try {
     const career = String(req.query.career || '')
     const userId = String(req.query.userId || '')

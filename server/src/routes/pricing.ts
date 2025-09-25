@@ -1,10 +1,10 @@
 /** Pricing API routes */
-import express from 'express'
+import { Router, Request, Response } from 'express'
 
-const router = express.Router()
+const router = Router()
+export { router as pricingRouter }
 
-// Get pricing tiers
-router.get('/pricing', async (req, res) => {
+router.get('/pricing', (req: Request, res: Response) => {
   try {
     const pricingTiers = {
       tiers: [
@@ -74,5 +74,3 @@ router.get('/pricing', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch pricing' })
   }
 })
-
-export { router as pricingRouter }

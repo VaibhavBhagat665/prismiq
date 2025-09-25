@@ -1,17 +1,22 @@
 /** Resume upload and processing routes */
-import express from 'express'
+import { Router, Request, Response } from 'express'
 import multer from 'multer'
-import { getFirestore } from 'firebase-admin/firestore'
-import { callMLService } from '../services/mlClient.js'
 import pdfParse from 'pdf-parse'
+import { callMLService } from '../services/mlClient'
+import { getFirestore } from 'firebase-admin/firestore'
 import fs from 'fs'
 
-const router = express.Router()
+const router = Router()
+export { router as resumeRouter }
 const db = getFirestore()
-const upload = multer({ dest: '/tmp' })
+
+const upload = multer({ 
+  dest: 'uploads/',
+  limits: { fileSize: 10 * 1024 * 1024 }
+})
 
 // Upload and process resume
-router.post('/upload-resume', upload.single('file'), async (req, res) => {
+router.post('/upload-resume', upload.single('file'), async (req: Request, res: Response) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'File required' })
@@ -66,5 +71,3 @@ router.post('/upload-resume', upload.single('file'), async (req, res) => {
     res.status(500).json({ error: 'Resume processing failed' })
   }
 })
-
-export { router as resumeRouter }
