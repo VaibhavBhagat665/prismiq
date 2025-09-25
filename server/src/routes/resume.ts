@@ -2,7 +2,7 @@
 import { Router, Request, Response } from 'express'
 import multer from 'multer'
 import pdfParse from 'pdf-parse'
-import { callMLService } from '../services/mlClient'
+import { callMLService } from '../services/mlClient.js'
 import { getFirestore } from 'firebase-admin/firestore'
 import fs from 'fs'
 

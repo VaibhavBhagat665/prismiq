@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express'
 import Joi from 'joi'
-import { callMLService } from '../services/mlClient'
+import { callMLService } from '../services/mlClient.js'
 import { getFirestore } from 'firebase-admin/firestore'
 
 const router = Router()

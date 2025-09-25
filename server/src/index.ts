@@ -6,13 +6,13 @@ import dotenv from 'dotenv';
 import multer from 'multer';
 
 // Import routes
-import { authRouter } from './routes/auth';
-import { recommendRouter } from './routes/recommend';
-import { roadmapRouter } from './routes/roadmap';
-import { chatRouter } from './routes/chat';
-import { pricingRouter } from './routes/pricing';
-import { resumeRouter } from './routes/resume';
-import { embedRouter } from './routes/embed';
+import { authRouter } from './routes/auth.js';
+import { recommendRouter } from './routes/recommend.js';
+import { roadmapRouter } from './routes/roadmap.js';
+import { chatRouter } from './routes/chat.js';
+import { pricingRouter } from './routes/pricing.js';
+import { resumeRouter } from './routes/resume.js';
+import { embedRouter } from './routes/embed.js';
 
 dotenv.config();
 
