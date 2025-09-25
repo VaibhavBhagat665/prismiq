@@ -1,0 +1,37 @@
+services:
+  # Backend API Service
+  - type: web
+    name: prismiq-backend
+    runtime: node
+    plan: starter
+    buildCommand: cd server && npm install && npm run build
+    startCommand: cd server && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: ML_SERVICE_URL
+        fromService:
+          type: web
+          name: prismiq-ml-service
+          property: host
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_CLIENT_EMAIL
+        sync: false
+      - key: FIREBASE_PRIVATE_KEY
+        sync: false
+    healthCheckPath: /health
+
+  # ML Service
+  - type: web
+    name: prismiq-ml-service
+    runtime: python
+    plan: starter
+    buildCommand: cd ml-service && pip install -r requirements.txt
+    startCommand: cd ml-service && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+    healthCheckPath: /health
