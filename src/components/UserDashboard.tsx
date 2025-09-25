@@ -290,15 +290,15 @@ const UserDashboard = () => {
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-center gap-3">
-                  <input type="checkbox" className="rounded" />
+                  <input type="checkbox" className="rounded" readOnly />
                   <span className="text-sm text-muted-foreground">Complete React Testing module</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <input type="checkbox" className="rounded" checked />
+                  <input type="checkbox" className="rounded" checked readOnly />
                   <span className="text-sm text-muted-foreground line-through">Update portfolio with new project</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <input type="checkbox" className="rounded" />
+                  <input type="checkbox" className="rounded" readOnly />
                   <span className="text-sm text-muted-foreground">Network with 2 professionals</span>
                 </div>
               </CardContent>

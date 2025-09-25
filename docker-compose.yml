@@ -1,17 +1,22 @@
 version: "3.9"
 services:
   frontend:
-    build: ./frontend
+    build: .
     ports:
-      - "3000:3000"
+      - "5173:5173"
     environment:
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
-      - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
-      - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
+      - VITE_API_URL=http://localhost:4000
+      - VITE_ML_SERVICE_URL=http://localhost:8000
+      - VITE_FIREBASE_API_KEY=${VITE_FIREBASE_API_KEY}
+      - VITE_FIREBASE_AUTH_DOMAIN=${VITE_FIREBASE_AUTH_DOMAIN}
+      - VITE_FIREBASE_PROJECT_ID=${VITE_FIREBASE_PROJECT_ID}
+      - VITE_FIREBASE_STORAGE_BUCKET=${VITE_FIREBASE_STORAGE_BUCKET}
+      - VITE_FIREBASE_MESSAGING_SENDER_ID=${VITE_FIREBASE_MESSAGING_SENDER_ID}
+      - VITE_FIREBASE_APP_ID=${VITE_FIREBASE_APP_ID}
+      - VITE_GEMINI_API_KEY=${VITE_GEMINI_API_KEY}
     depends_on:
       - server
-    command: npm run dev
+    command: npm run dev -- --host 0.0.0.0
 
   server:
     build: ./server
@@ -19,10 +24,11 @@ services:
       - "4000:4000"
     environment:
       - PORT=4000
-      - ML_SERVICE_URL=${ML_SERVICE_URL}
+      - ML_SERVICE_URL=http://ml-service:8000
       - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
       - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
       - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
+      - FIREBASE_SERVICE_ACCOUNT_KEY=${FIREBASE_SERVICE_ACCOUNT_KEY}
     depends_on:
       - ml-service
     command: npm run dev
@@ -32,6 +38,5 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
       - GEMINI_API_KEY=${GEMINI_API_KEY}
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload

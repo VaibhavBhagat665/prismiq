@@ -9,6 +9,9 @@ import { recommendRouter } from './routes/recommend.js'
 import { roadmapRouter } from './routes/roadmap.js'
 import { chatRouter } from './routes/chat.js'
 import { embedRouter } from './routes/embed.js'
+import { authRouter } from './routes/auth.js'
+import { pricingRouter } from './routes/pricing.js'
+import { resumeRouter } from './routes/resume.js'
 import { initFirestore } from './services/firestore.js'
 
 dotenv.config()
@@ -28,13 +31,9 @@ app.use('/api', recommendRouter)
 app.use('/api', roadmapRouter)
 app.use('/api', chatRouter)
 app.use('/api', embedRouter)
-
-const upload = multer({ dest: '/tmp' })
-app.post('/api/upload-resume', upload.single('file'), async (req, res) => {
-  if (!req.file) return res.status(400).json({ error: 'file required' })
-  // In prototype, just echo a few fake parsed skills
-  return res.json({ skills: ['python', 'sql', 'ml'] })
-})
+app.use('/api', authRouter)
+app.use('/api', pricingRouter)
+app.use('/api', resumeRouter)
 
 const port = Number(process.env.PORT || 4000)
 const server = app.listen(port, () => logger.info({ msg: 'server_started', port }))

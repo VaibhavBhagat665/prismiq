@@ -1,13 +1,40 @@
 import { Router } from 'express'
-import { callMl } from '../services/mlClient.js'
-import { writeRoadmap } from '../services/firestore.js'
+import { callMLService } from '../services/mlClient.js'
+import { getFirestore } from 'firebase-admin/firestore'
 
 export const roadmapRouter = Router()
+const db = getFirestore()
 
 roadmapRouter.get('/roadmap', async (req, res) => {
-  const career = String(req.query.career || '')
-  if (!career) return res.status(400).json({ error: 'career required' })
-  const data = await callMl('/roadmap', { career })
-  await writeRoadmap(data)
-  return res.json(data)
+  try {
+    const career = String(req.query.career || '')
+    const userId = String(req.query.userId || '')
+    
+    if (!career) return res.status(400).json({ error: 'career required' })
+    if (!userId) return res.status(400).json({ error: 'userId required' })
+    
+    // Call ML service for roadmap
+    const mlResponse = await callMLService('/roadmap', { 
+      career_name: career,
+      user_id: userId 
+    })
+    
+    // Save roadmap to Firestore
+    const careerSlug = career.toLowerCase().replace(/\s+/g, '-')
+    const roadmapDoc = {
+      career,
+      roadmap: mlResponse.roadmap || {},
+      phases: mlResponse.phases || [],
+      generatedAt: new Date(),
+      source: 'ml_service'
+    }
+    
+    await db.collection('users').doc(userId)
+      .collection('roadmaps').doc(careerSlug).set(roadmapDoc)
+    
+    return res.json(mlResponse)
+  } catch (error) {
+    console.error('Roadmap error:', error)
+    return res.status(500).json({ error: 'Failed to generate roadmap' })
+  }
 })

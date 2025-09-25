@@ -33,28 +33,42 @@ const HeroSection = () => {
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-medium tracking-tighter text-balance text-foreground">
           Prismiq — Your <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Future, Decoded</span>
         </h1>
-        
+
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto text-balance">
           AI-powered personalized career advisor. Discover your skills. Map your future. Evolve with the job market.
         </p>
-        
+
         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6 items-center">
           <Button 
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/auth/signup')}
             className="hero-gradient text-white hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] text-base h-12 px-8 transition-all duration-300 min-h-[48px] font-medium"
           >
-            Launch Dashboard
+            Get Started Free
           </Button>
-          <Button variant="outline" className="border-primary/40 text-foreground hover:bg-primary/10 hover:border-primary/60 text-base h-12 px-8 transition-all duration-300 min-h-[48px]">
-            Explore Careers
+          <Button 
+            variant="outline" 
+            onClick={() => navigate('/auth/signin')}
+            className="border-primary/40 text-foreground hover:bg-primary/10 hover:border-primary/60 text-base h-12 px-8 transition-all duration-300 min-h-[48px]"
+          >
+            Sign In
           </Button>
         </div>
-        
-        <div className="pt-6 text-sm text-muted-foreground">
+
+        <div className="pt-4 text-sm text-muted-foreground">
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate('/dashboard?demo=true')}
+            className="text-primary hover:text-primary/80 underline-offset-4 hover:underline"
+          >
+            Try Demo Mode
+          </Button>
+        </div>
+
+        <div className="pt-2 text-sm text-muted-foreground">
           Free forever • AI mentorship in 10+ languages
         </div>
       </div>
-      
+
       {/* Task Manager UI integrated in hero section with glassmorphic effect */}
       <div className={`w-full max-w-7xl mt-12 z-10 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
         <div className="cosmic-glow relative rounded-xl overflow-hidden border border-border backdrop-blur-sm bg-card shadow-lg">

@@ -23,14 +23,21 @@ import {
   Building,
   MessageCircle,
   Upload,
-  Sparkles
+  Sparkles,
+  LogOut
 } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { toast } from 'sonner';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CareerRecommendations from '@/components/CareerRecommendations';
 import Roadmap from '@/components/Roadmap';
-import ChatBox from '@/components/ChatBox';
-import ResumeUpload from '@/components/ResumeUpload';
+import ChatBot from '@/components/ChatBot';
+import ResumeReview from '@/components/ResumeReview';
+import RealtimeRecommendations from '@/components/RealtimeRecommendations';
 
 interface JobOpportunity {
   id: string;
@@ -58,6 +65,10 @@ interface MLSuggestion {
 }
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { user, userProfile, isLoading: authLoading, isDemoMode, setDemoMode } = useAuth();
+  
   const [jobs, setJobs] = useState<JobOpportunity[]>([]);
   const [filteredJobs, setFilteredJobs] = useState<JobOpportunity[]>([]);
   const [mlSuggestions, setMlSuggestions] = useState<MLSuggestion[]>([]);
@@ -65,6 +76,29 @@ const Dashboard = () => {
   const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
   const [selectedExperience, setSelectedExperience] = useState<string>('all');
   const [loading, setLoading] = useState(true);
+
+  // Check for demo mode from URL params
+  useEffect(() => {
+    const demoParam = searchParams.get('demo');
+    if (demoParam === 'true') {
+      setDemoMode(true);
+    }
+  }, [searchParams, setDemoMode]);
+
+  const handleSignOut = async () => {
+    try {
+      if (isDemoMode) {
+        setDemoMode(false);
+        navigate('/');
+      } else {
+        await signOut(auth);
+        toast.success('Signed out successfully');
+        navigate('/');
+      }
+    } catch (error) {
+      toast.error('Failed to sign out');
+    }
+  };
 
   // Mock data - Replace with actual API calls
   const mockJobs: JobOpportunity[] = [
@@ -244,13 +278,30 @@ const Dashboard = () => {
       <main className="flex-1 container mx-auto px-4 py-8">
         {/* Dashboard Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
-            Your Career Dashboard
-            <Sparkles className="h-8 w-8 text-yellow-500" />
-          </h1>
-          <p className="text-muted-foreground text-lg">
-            AI-powered career guidance, recommendations, and job opportunities
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
+                {isDemoMode ? 'Demo Dashboard' : 'Your Career Dashboard'}
+                <Sparkles className="h-8 w-8 text-yellow-500" />
+              </h1>
+              <p className="text-muted-foreground text-lg">
+                {isDemoMode ? 'Exploring Prismiq in demo mode' : 'AI-powered career guidance, recommendations, and job opportunities'}
+              </p>
+              {userProfile && (
+                <p className="text-sm text-muted-foreground mt-2">
+                  Welcome back, {userProfile.name}! {userProfile.interests.length} interests tracked
+                </p>
+              )}
+            </div>
+            <Button 
+              variant="outline" 
+              onClick={handleSignOut}
+              className="flex items-center gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              {isDemoMode ? 'Exit Demo' : 'Sign Out'}
+            </Button>
+          </div>
         </div>
 
         {/* Main Dashboard Tabs */}
@@ -467,12 +518,19 @@ const Dashboard = () => {
 
           {/* AI Chat Tab */}
           <TabsContent value="chat">
-            <ChatBox />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <ChatBot />
+              </div>
+              <div className="lg:col-span-1">
+                <RealtimeRecommendations />
+              </div>
+            </div>
           </TabsContent>
 
           {/* Resume Upload Tab */}
           <TabsContent value="resume">
-            <ResumeUpload />
+            <ResumeReview />
           </TabsContent>
         </Tabs>
       </main>
